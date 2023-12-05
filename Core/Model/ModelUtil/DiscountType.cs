@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace Core.Model.ModelUtil
 {
-    public enum AccountType
+    public enum DiscountType
     {
-        Admin = 0,
-        Doctor,
-        Patient
+        Percentage = 0,
+        Value
     }
 }

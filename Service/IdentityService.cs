@@ -17,10 +17,13 @@ namespace Service
         }
 
         public async Task<IdentityResult> RegisterUserAsync(string firstName, string lastName,string email, string password, 
-            string phone, Gender gender, DateOnly dateOfBirth, AccountType accountType, string? imagePath)
+            string phone, Gender gender, DateOnly dateOfBirth, AccountType accountType, IFormFile? profileImage)
         {
             // To generate the full name!
             var fullName = firstName + " " + lastName;
+
+            // To generate the image path!
+            var imagePath = "/images/" + Guid.NewGuid() + profileImage?.FileName;
 
             // To generate a new user for registeration!
             var user = new ApplicationUser 

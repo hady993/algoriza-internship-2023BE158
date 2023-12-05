@@ -12,7 +12,7 @@ namespace Core.Service
     public interface IIdentityService
     {
         Task<IdentityResult> RegisterUserAsync(string firstName, string lastName, string email, string password, 
-            string phone, Gender gender, DateOnly dateOfBirth, AccountType accountType, string? imagePath);
+            string phone, Gender gender, DateOnly dateOfBirth, AccountType accountType, IFormFile? profileImage);
         Task<SignInResult> LoginAsync(string email, string password);
         Task LogoutAsync();
     }

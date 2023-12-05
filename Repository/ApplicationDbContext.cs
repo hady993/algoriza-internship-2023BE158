@@ -7,9 +7,6 @@ namespace Repository
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole, string>
     {
-        // DbSet for application entities
-        //public DbSet<YourEntity> YourEntities { get; set; }
-
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
         {
@@ -19,7 +16,12 @@ namespace Repository
         {
             base.OnModelCreating(modelBuilder);
 
-            // Configure any additional entity relationships or constraints here
+            // To prevent the Booking removing by the effect of Time removing!
+            modelBuilder.Entity<Booking>()
+                .HasOne(b => b.Time)
+                .WithOne(t => t.Booking)
+                .HasForeignKey<Booking>(b => b.TimeId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

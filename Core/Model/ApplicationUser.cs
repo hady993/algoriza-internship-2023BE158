@@ -10,5 +10,7 @@ namespace Core.Model
         public Gender Gender { get; set; }
         public DateOnly DateOfBirth { get; set; }
         public AccountType AccountType { get; set; }
+        public Doctor Doctor { get; set; }
+        public List<Booking> Bookings { get; set; }
     }
 }

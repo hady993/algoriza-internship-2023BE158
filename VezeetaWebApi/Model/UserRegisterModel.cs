@@ -29,14 +29,13 @@ namespace VezeetaWebApi.Model
         public string Phone { get; set; }
 
         [Required]
-        [JsonConverter(typeof(JsonStringEnumConverter))]
+        //[JsonConverter(typeof(JsonStringEnumConverter))]
         public Gender Gender { get; set; }
 
         [Required]
         public DateOnly DateOfBirth { get; set; }
 
         [Required]
-        [JsonConverter(typeof(JsonStringEnumConverter))]
         public AccountType AccountType { get; set; }
 
         public IFormFile? ProfileImage { get; set; }

@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Core.Model.ModelUtil
 {
-    public enum AccountType
+    public enum BookingStatus
     {
-        Admin = 0,
-        Doctor,
-        Patient
+        Pending = 0,
+        Completed,
+        Cancelled
     }
 }

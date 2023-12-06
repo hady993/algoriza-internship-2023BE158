@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Model.ModelUtil
+namespace Core.Domain.DomainUtil
 {
-    public enum BookingStatus
+    public enum AccountType
     {
-        Pending = 0,
-        Completed,
-        Cancelled
+        Admin = 0,
+        Doctor,
+        Patient
     }
 }

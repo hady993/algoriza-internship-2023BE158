@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace VezeetaWebApi.Model
+namespace Core.Model
 {
     public class UserLoginModel
     {

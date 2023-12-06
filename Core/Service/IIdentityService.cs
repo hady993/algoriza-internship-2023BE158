@@ -1,4 +1,5 @@
-﻿using Core.Model.ModelUtil;
+﻿using Core.Domain.DomainUtil;
+using Core.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -11,9 +12,9 @@ namespace Core.Service
 {
     public interface IIdentityService
     {
-        Task<IdentityResult> RegisterUserAsync(string firstName, string lastName, string email, string password, 
-            string phone, Gender gender, DateOnly dateOfBirth, AccountType accountType, IFormFile? profileImage);
+        Task<IdentityResult> RegisterUserAsync(UserRegisterModel model);
         Task<SignInResult> LoginAsync(string email, string password);
         Task LogoutAsync();
+        Task<bool> IsUserInRoleAsync(string userId, string role);
     }
 }

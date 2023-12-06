@@ -1,3 +1,4 @@
+using Core.Domain;
 using Core.Model;
 using Core.Repository;
 using Core.Service;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
 using Repository;
 using Service;
+using System.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +28,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
+
+// Configure and Create roles!
+using (var scope = builder.Services.BuildServiceProvider().CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    CreateRoles(roleManager);
+}
 
 // To Configure Authentication!
 builder.Services.AddAuthentication(options =>
@@ -55,3 +64,20 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+
+static void CreateRoles(RoleManager<IdentityRole> roleManager)
+{
+    // To ensure roles exist, or to create if not!
+    CreateRoleIfNotExists(roleManager, Roles.Admin);
+    CreateRoleIfNotExists(roleManager, Roles.Doctor);
+    CreateRoleIfNotExists(roleManager, Roles.Patient);
+}
+
+static void CreateRoleIfNotExists(RoleManager<IdentityRole> roleManager, string roleName)
+{
+    if (!roleManager.RoleExistsAsync(roleName).Result)
+    {
+        roleManager.CreateAsync(new IdentityRole(roleName)).Wait();
+    }
+}

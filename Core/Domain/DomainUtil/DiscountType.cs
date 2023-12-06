@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Model.ModelUtil
+namespace Core.Domain.DomainUtil
 {
     public enum DiscountType
     {

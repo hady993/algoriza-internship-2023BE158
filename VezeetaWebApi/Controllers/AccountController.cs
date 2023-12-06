@@ -1,8 +1,7 @@
-﻿using Core.Service;
+﻿using Core.Model;
+using Core.Service;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using VezeetaWebApi.Model;
 
 namespace VezeetaWebApi.Controllers
 {
@@ -25,10 +24,7 @@ namespace VezeetaWebApi.Controllers
             if (ModelState.IsValid)
             {
                 // Call the identity service to register the user!
-                var result = await _identityService.RegisterUserAsync(
-                    model.FirstName, model.LastName, model.Email, model.Password, model.Phone,
-                    model.Gender, model.DateOfBirth, model.AccountType, model.ProfileImage
-                );
+                var result = await _identityService.RegisterUserAsync(model);
 
                 // Save the profile image to wwwroot/images if the path != null!
                 if (model.ProfileImage != null)
@@ -68,7 +64,7 @@ namespace VezeetaWebApi.Controllers
         }
 
         [HttpPost("logout")]
-        [Authorize] // Ensure that only authenticated users can log out
+        [Authorize(Roles = Roles.Admin)] // Ensure that only authenticated users can log out
         public async Task<IActionResult> Logout()
         {
             await _identityService.LogoutAsync();
@@ -93,5 +89,6 @@ namespace VezeetaWebApi.Controllers
                 profileImage.CopyTo(fileStream);
             }
         }
+
     }
 }

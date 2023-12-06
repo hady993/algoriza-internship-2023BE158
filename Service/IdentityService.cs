@@ -1,5 +1,6 @@
-﻿using Core.Model;
-using Core.Model.ModelUtil;
+﻿using Core.Domain;
+using Core.Domain.DomainUtil;
+using Core.Model;
 using Core.Repository;
 using Core.Service;
 using Microsoft.AspNetCore.Http;
@@ -16,24 +17,31 @@ namespace Service
             _identityRepository = identityRepository;
         }
 
-        public async Task<IdentityResult> RegisterUserAsync(string firstName, string lastName,string email, string password, 
-            string phone, Gender gender, DateOnly dateOfBirth, AccountType accountType, IFormFile? profileImage)
+        public async Task<IdentityResult> RegisterUserAsync(UserRegisterModel model)
         {
             // To generate the full name!
-            var fullName = firstName + " " + lastName;
+            var fullName = model.FirstName + " " + model.LastName;
 
             // To generate the image path!
-            var imagePath = "/images/" + Guid.NewGuid() + profileImage?.FileName;
+            var imagePath = (model.ProfileImage != null) ? "/images/" + Guid.NewGuid() + model.ProfileImage.FileName : null;
 
             // To generate a new user for registeration!
-            var user = new ApplicationUser 
-            { 
-                UserName = email, Email = email, PhoneNumber = phone,
-                FullName = fullName, Gender = gender, DateOfBirth = dateOfBirth,
-                AccountType = accountType, ProfileImage = imagePath
+            var user = new ApplicationUser
+            {
+                UserName = model.Email,
+                Email = model.Email,
+                PhoneNumber = model.Phone,
+                FullName = fullName,
+                Gender = model.Gender,
+                DateOfBirth = model.DateOfBirth,
+                AccountType = model.AccountType,
+                ProfileImage = imagePath
             };
 
-            return await _identityRepository.CreateUserAsync(user, password);
+            // To generate the user role name!
+            var role = Enum.GetName(typeof(AccountType), model.AccountType);
+
+            return await _identityRepository.CreateUserAsync(user, model.Password, role);
         }
 
         public async Task<SignInResult> LoginAsync(string email, string password)
@@ -44,6 +52,11 @@ namespace Service
         public async Task LogoutAsync()
         {
             await _identityRepository.SignOutAsync();
+        }
+
+        public async Task<bool> IsUserInRoleAsync(string userId, string role)
+        {
+            return await _identityRepository.IsUserInRoleAsync(userId, role);
         }
     }
 }

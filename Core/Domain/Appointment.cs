@@ -1,11 +1,11 @@
-﻿using Core.Model.ModelUtil;
+﻿using Core.Domain.DomainUtil;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Model
+namespace Core.Domain
 {
     public class Appointment
     {

@@ -1,9 +1,10 @@
-﻿using Core.Model.ModelUtil;
+﻿using Core.Domain.DomainUtil;
+using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace VezeetaWebApi.Model
+namespace Core.Model
 {
     public class UserRegisterModel
     {

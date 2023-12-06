@@ -1,7 +1,7 @@
-﻿using Core.Model.ModelUtil;
+﻿using Core.Domain.DomainUtil;
 using Microsoft.AspNetCore.Identity;
 
-namespace Core.Model
+namespace Core.Domain
 {
     public class ApplicationUser : IdentityUser
     {

@@ -15,10 +15,13 @@ namespace Repository
         // To seed Admin data into DB initially!
         public static void SeedAdmin(this ModelBuilder modelBuilder)
         {
+            var adminId = "6cd4f6f3-f566-46c2-9546-b5530964a22f";
+            var roleId = "e5370727-9eea-4c77-a071-00ebfd760617";
+
             // Create Admin!
             var admin = new ApplicationUser
             {
-                Id = "6cd4f6f3-f566-46c2-9546-b5530964a22f",
+                Id = adminId,
                 FullName = "Ahmed Admin",
                 Email = "admin@example.com",
                 NormalizedEmail = "ADMIN@EXAMPLE.COM",
@@ -36,6 +39,13 @@ namespace Repository
 
             // Seed Admin!
             modelBuilder.Entity<ApplicationUser>().HasData(admin);
+
+            // Set User Role to Admin!
+            modelBuilder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string>
+            {
+                RoleId = roleId,
+                UserId = adminId
+            });
         }
 
         // To seed Specialization data into DB initially!

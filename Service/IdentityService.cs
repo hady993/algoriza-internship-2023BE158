@@ -17,14 +17,13 @@ namespace Service
             _identityRepository = identityRepository;
         }
 
-        // To register patients only!
-        public async Task<IdentityResult> RegisterUserAsync(UserRegisterModel model)
+        public async Task<IdentityResult> RegisterUserAsync(BaseUserModel model, AccountType type, IFormFile? profileImage)
         {
             // To generate the full name!
             var fullName = model.FirstName + " " + model.LastName;
 
             // To generate the image path!
-            var imagePath = (model.ProfileImage != null) ? "/images/" + Guid.NewGuid() + model.ProfileImage.FileName : null;
+            var imagePath = (profileImage != null) ? "/images/" + Guid.NewGuid() + profileImage.FileName : null;
 
             // To generate a new user for registeration!
             var user = new ApplicationUser
@@ -35,12 +34,12 @@ namespace Service
                 FullName = fullName,
                 Gender = model.Gender,
                 DateOfBirth = model.DateOfBirth,
-                AccountType = AccountType.Patient,
+                AccountType = type,
                 ProfileImage = imagePath
             };
 
             // To generate the user role name!
-            var role = Enum.GetName(typeof(AccountType), AccountType.Patient);
+            var role = Enum.GetName(typeof(AccountType), type);
 
             return await _identityRepository.CreateUserAsync(user, model.Password, role);
         }

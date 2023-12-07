@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repository;
 
@@ -11,9 +12,11 @@ using Repository;
 namespace Repository.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231207095217_AlterSeedAdminData")]
+    partial class AlterSeedAdminData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -144,7 +147,7 @@ namespace Repository.Migrations
 
                     b.HasIndex("DoctorId");
 
-                    b.ToTable("Appointment", (string)null);
+                    b.ToTable("Appointment");
                 });
 
             modelBuilder.Entity("Core.Domain.Booking", b =>
@@ -183,7 +186,7 @@ namespace Repository.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Booking", (string)null);
+                    b.ToTable("Booking");
                 });
 
             modelBuilder.Entity("Core.Domain.DiscountCode", b =>
@@ -212,7 +215,7 @@ namespace Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DiscountCode", (string)null);
+                    b.ToTable("DiscountCode");
                 });
 
             modelBuilder.Entity("Core.Domain.Doctor", b =>
@@ -240,7 +243,7 @@ namespace Repository.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Doctor", (string)null);
+                    b.ToTable("Doctor");
                 });
 
             modelBuilder.Entity("Core.Domain.Specialization", b =>
@@ -262,7 +265,7 @@ namespace Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Specialization", (string)null);
+                    b.ToTable("Specialization");
 
                     b.HasData(
                         new
@@ -363,7 +366,7 @@ namespace Repository.Migrations
 
                     b.HasIndex("AppointmentId");
 
-                    b.ToTable("Time", (string)null);
+                    b.ToTable("Time");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

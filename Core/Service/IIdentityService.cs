@@ -12,7 +12,7 @@ namespace Core.Service
 {
     public interface IIdentityService
     {
-        Task<IdentityResult> RegisterUserAsync(UserRegisterModel model);
+        Task<IdentityResult> RegisterUserAsync(BaseUserModel model, AccountType type, IFormFile? profileImage);
         Task<SignInResult> LoginAsync(string email, string password);
         Task LogoutAsync();
         Task<bool> IsUserInRoleAsync(string userId, string role);

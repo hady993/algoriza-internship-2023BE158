@@ -36,9 +36,6 @@ namespace Core.Model
         [Required]
         public DateOnly DateOfBirth { get; set; }
 
-        [Required]
-        public AccountType AccountType { get; set; }
-
         public IFormFile? ProfileImage { get; set; }
     }
 }

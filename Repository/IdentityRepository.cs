@@ -22,6 +22,7 @@ namespace Repository
             return await _userManager.FindByEmailAsync(email);
         }
 
+        // To support Registeration!
         public async Task<IdentityResult> CreateUserAsync(ApplicationUser user, string password, string role)
         {
             var result = await _userManager.CreateAsync(user, password);
@@ -59,7 +60,8 @@ namespace Repository
             // Remove the registered user!
             return await _userManager.DeleteAsync(user);
         }
-
+        
+        // To support Login!
         public async Task<SignInResult> PasswordSignInAsync(string email, string password)
         {
             return await _signInManager.PasswordSignInAsync(email, password, false, false);

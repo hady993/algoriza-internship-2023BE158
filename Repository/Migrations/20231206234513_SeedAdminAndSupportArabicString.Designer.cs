@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repository;
 
@@ -11,9 +12,11 @@ using Repository;
 namespace Repository.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231206234513_SeedAdminAndSupportArabicString")]
+    partial class SeedAdminAndSupportArabicString
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -108,7 +111,7 @@ namespace Repository.Migrations
                             Id = "6cd4f6f3-f566-46c2-9546-b5530964a22f",
                             AccessFailedCount = 0,
                             AccountType = 0,
-                            ConcurrencyStamp = "b1325166-6d93-408a-a489-6a4f30038677",
+                            ConcurrencyStamp = "defd5455-6dcd-443e-a68a-446002923425",
                             DateOfBirth = new DateOnly(2000, 10, 15),
                             Email = "admin@example.com",
                             EmailConfirmed = false,
@@ -117,10 +120,10 @@ namespace Repository.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@EXAMPLE.COM",
                             NormalizedUserName = "ADMIN@EXAMPLE.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEOJQ5DVyAnQQ2MaDRPI2j6keOErKtnAeWiE9iQVlqooeUxlpUuSerrUofynZtlVAww==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEOUrQjEkcFhCej5zPFezwZBxGak6olCSyMb+BoFL8hqQS4YcfZGke7Jbkj296YtE9w==",
                             PhoneNumber = "01029108133",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "06f8de6d-0ec9-465c-bd7e-9bf606363598",
+                            SecurityStamp = "23d86a38-bb73-428e-bba9-d461f29c5e4c",
                             TwoFactorEnabled = false,
                             UserName = "admin@example.com"
                         });
@@ -263,86 +266,6 @@ namespace Repository.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Specialization");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            NameAr = "تخدير",
-                            NameEn = "Anesthesiology"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            NameAr = "قلب",
-                            NameEn = "Cardiology"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            NameAr = "جلدية",
-                            NameEn = "Dermatology"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            NameAr = "جراحة",
-                            NameEn = "Surgery"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            NameAr = "أعصاب",
-                            NameEn = "Neurology"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            NameAr = "أنف وأذن وحنجرة",
-                            NameEn = "Otolaryngology"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            NameAr = "أطفال",
-                            NameEn = "Pediatrics"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            NameAr = "علاج طبيعي",
-                            NameEn = "PhysicalMedicine"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            NameAr = "طب نفسي",
-                            NameEn = "Psychiatry"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            NameAr = "أشعة",
-                            NameEn = "Radiology"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            NameAr = "صدر",
-                            NameEn = "Thoracic"
-                        },
-                        new
-                        {
-                            Id = 12,
-                            NameAr = "مسالك بولية",
-                            NameEn = "Urology"
-                        },
-                        new
-                        {
-                            Id = 13,
-                            NameAr = "أوعية دموية",
-                            NameEn = "Vascular"
-                        });
                 });
 
             modelBuilder.Entity("Core.Domain.Time", b =>

@@ -17,6 +17,7 @@ namespace Service
             _identityRepository = identityRepository;
         }
 
+        // To register patients only!
         public async Task<IdentityResult> RegisterUserAsync(UserRegisterModel model)
         {
             // To generate the full name!
@@ -34,12 +35,12 @@ namespace Service
                 FullName = fullName,
                 Gender = model.Gender,
                 DateOfBirth = model.DateOfBirth,
-                AccountType = model.AccountType,
+                AccountType = AccountType.Patient,
                 ProfileImage = imagePath
             };
 
             // To generate the user role name!
-            var role = Enum.GetName(typeof(AccountType), model.AccountType);
+            var role = Enum.GetName(typeof(AccountType), AccountType.Patient);
 
             return await _identityRepository.CreateUserAsync(user, model.Password, role);
         }

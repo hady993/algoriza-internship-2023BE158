@@ -18,7 +18,7 @@ namespace VezeetaWebApi.Controllers
             _hostingEnvironment = hostingEnvironment;
         }
 
-        [HttpPost("register")]
+        [HttpPost("RegisterPatient")]
         public async Task<IActionResult> Register([FromForm] UserRegisterModel model)
         {
             if (ModelState.IsValid)

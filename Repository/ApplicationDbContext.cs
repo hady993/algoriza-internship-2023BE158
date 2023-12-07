@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Repository
 {
@@ -15,6 +16,15 @@ namespace Repository
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            // To seed the Admin data!
+            modelBuilder.SeedAdmin();
+
+            // To support Arabic strings!
+            modelBuilder.SupportArabicSpecializationName();
+
+            // To seed the Specialization data!
+            modelBuilder.SeedSpecialization();
 
             // To prevent the Booking removing by the effect of Time removing!
             modelBuilder.Entity<Booking>()

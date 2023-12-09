@@ -148,5 +148,24 @@ namespace VezeetaWebApi.Controllers
 
             return BadRequest("Invalid data");
         }
+
+        [HttpPost()]
+        public async Task<IActionResult> GetPatientById([FromForm] [Required] string id)
+        {
+            if (ModelState.IsValid)
+            {
+                var patient = await _adminService.GetPatientByIdAsync(id);
+
+                if (patient != null)
+                {
+                    return Ok(patient);
+                }
+
+                return BadRequest($"Patient with Id : {id} is not found");
+            }
+
+            return BadRequest("Invalid data");
+        }
+
     }
 }

@@ -24,6 +24,11 @@ namespace Repository
             return await _userManager.FindByEmailAsync(email);
         }
 
+        public async Task<ApplicationUser> FindUserByIdAsync(string id)
+        {
+            return await _userManager.FindByIdAsync(id);
+        }
+
         public async Task<IEnumerable<ApplicationUser>> GetAllUsersAsync()
         {
             return await _userManager.Users.ToListAsync();

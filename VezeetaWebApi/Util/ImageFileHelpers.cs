@@ -58,8 +58,7 @@ namespace VezeetaWebApi.Util
         // Helper method to generate profile image path
         public static string GenerateProfileImagePath(IFormFile profileImage)
         {
-            var imageName = profileImage.FileName;
-            return (imageName != null) ? Guid.NewGuid() + imageName : null;
+            return (profileImage != null) ? Guid.NewGuid() + profileImage.FileName : null;
         }
     }
 }

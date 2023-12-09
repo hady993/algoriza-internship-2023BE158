@@ -218,5 +218,68 @@ namespace Service
 
             return filteredResult;
         }
+
+        public async Task<PatientDto> GetPatientByIdAsync(string id)
+        {
+            // Retrieving the patient from the database!
+            var patient = await _identityRepository.FindUserByIdAsync(id);
+
+            if (patient == null)
+            {
+                return null;
+            }
+
+            // Create new userDto to save patient details!
+            var details = new UserDto
+            {
+                ProfileImage = patient.ProfileImage,
+                FullName = patient.FullName,
+                Email = patient.Email,
+                Phone = patient.PhoneNumber,
+                Gender = patient.Gender.ToString(),
+                DateOfBirth = patient.DateOfBirth
+            };
+
+            // Create new list of bookingRequestDto to retrieve requests data!
+            List<BookingRequestDto> requsts = new List<BookingRequestDto>();
+
+            // Retrieve all bookings of patient!
+            var bookings = patient.Bookings;
+
+            if (bookings != null)
+            {
+                foreach (var booking in bookings)
+                {
+                    var doctor = booking.Time.Appointment.Doctor;
+                    var appointment = booking.Time.Appointment;
+
+                    var request = new BookingRequestDto
+                    {
+                        DoctorImage = doctor.User.ProfileImage,
+                        DoctorName = doctor.User.FullName,
+                        SpetializationAr = doctor.Specialization.NameAr,
+                        SpetializationEn = doctor.Specialization.NameEn,
+                        Day = appointment.Day,
+                        Time = booking.Time.DocTime,
+                        Price = booking.Price,
+                        DiscountCode = booking.DiscountCode.Code,
+                        FinalPrice = booking.FinalPrice,
+                        Status = booking.Status
+                    };
+
+                    requsts.Add(request);
+                }
+            }
+
+            // Create new patientDto to retrieve the data!
+            var patientDto = new PatientDto
+            {
+                Details = details,
+                Requests = requsts
+            };
+
+            return patientDto;
+        }
+
     }
 }

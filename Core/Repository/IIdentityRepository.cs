@@ -6,6 +6,7 @@ namespace Core.Repository
     public interface IIdentityRepository
     {
         Task<ApplicationUser> FindUserByEmailAsync(string email);
+        Task<ApplicationUser> FindUserByIdAsync(string id);
         Task<IEnumerable<ApplicationUser>> GetAllUsersAsync();
         Task<IdentityResult> CreateUserAsync(ApplicationUser user, string password, string role);
         Task<IdentityResult> UpdateUserAsync(ApplicationUser user);

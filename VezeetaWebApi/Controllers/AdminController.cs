@@ -136,5 +136,17 @@ namespace VezeetaWebApi.Controllers
             return BadRequest("Invalid deleting data");
         }
 
+        [HttpPost()]
+        public async Task<IActionResult> GetAllPatients([FromBody] StringSearchModel search)
+        {
+            if (ModelState.IsValid)
+            {
+                var patients = await _adminService.GetAllPatientsAsync(search);
+
+                return Ok(patients);
+            }
+
+            return BadRequest("Invalid data");
+        }
     }
 }

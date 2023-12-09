@@ -2,6 +2,7 @@
 using Core.Helpful;
 using Core.Repository;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Repository
 {
@@ -21,6 +22,11 @@ namespace Repository
         public async Task<ApplicationUser> FindUserByEmailAsync(string email)
         {
             return await _userManager.FindByEmailAsync(email);
+        }
+
+        public async Task<IEnumerable<ApplicationUser>> GetAllUsersAsync()
+        {
+            return await _userManager.Users.ToListAsync();
         }
 
         // To support Registeration!

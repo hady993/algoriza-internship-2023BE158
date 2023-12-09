@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -181,5 +182,41 @@ namespace Service
             return result;
         }
 
+        public async Task<IEnumerable<UserDto>> GetAllPatientsAsync(StringSearchModel searchModel)
+        {
+            // Retrieving all users from the database!
+            var users = await _identityRepository.GetAllUsersAsync();
+
+            // To filter patients from users!
+            var patients = users.Where(u => u.AccountType == AccountType.Patient);
+
+            // Create new list of doctorDto to retrieve the data!
+            List<UserDto> result = new List<UserDto>();
+
+            foreach (var patient in patients)
+            {
+                var patientDto = new UserDto
+                {
+                    ProfileImage = patient.ProfileImage,
+                    FullName = patient.FullName,
+                    Email = patient.Email,
+                    Phone = patient.PhoneNumber,
+                    Gender = patient.Gender.ToString(),
+                    DateOfBirth = patient.DateOfBirth
+                };
+
+                result.Add(patientDto);
+            }
+
+            // To filter patients and support pagination!
+            var itemsToSkip = (searchModel.PageNumber - 1) * searchModel.PageSize;
+
+            var filteredResult = result
+                .Where(d => d.FullName.Contains(searchModel.Search) || d.Email.Contains(searchModel.Search))
+                .Skip(itemsToSkip)
+                .Take(searchModel.PageSize);
+
+            return filteredResult;
+        }
     }
 }

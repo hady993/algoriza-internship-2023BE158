@@ -17,5 +17,6 @@ namespace Core.Service
         Task<IdentityResult> AddDoctorAsync(DoctorModel model, string? imagePath);
         Task<IdentityResult> EditDoctorAsync(DoctorUpdateModel model, string? imagePath);
         Task<IdentityResult> DeleteDoctorAsync(int id);
+        Task<IEnumerable<UserDto>> GetAllPatientsAsync(StringSearchModel searchModel);
     }
 }

@@ -44,6 +44,31 @@ namespace Service
             return await _identityRepository.CreateUserAsync(user, model.Password, role);
         }
 
+        public async Task<IdentityResult> UpdateUserAsync(SuperBaseUserModel model, IFormFile? profileImage, ApplicationUser user)
+        {
+            // To generate the full name!
+            var fullName = model.FirstName + " " + model.LastName;
+
+            // To generate the image path!
+            var imagePath = (profileImage != null) ? "/images/" + Guid.NewGuid() + profileImage.FileName : null;
+
+            // To update user's properties!
+            user.UserName = model.Email;
+            user.Email = model.Email;
+            user.PhoneNumber = model.Phone;
+            user.FullName = fullName;
+            user.Gender = model.Gender;
+            user.DateOfBirth = model.DateOfBirth;
+            user.ProfileImage = imagePath;
+
+            return await _identityRepository.UpdateUserAsync(user);
+        }
+
+        public async Task<IdentityResult> ChangeUserPasswordAsync(ApplicationUser user, string oldPassword, string newPassword)
+        {
+            return await _identityRepository.UpdatePasswordAsync(user, oldPassword, newPassword);
+        }
+
         public async Task<SignInResult> LoginAsync(string email, string password)
         {
             return await _identityRepository.PasswordSignInAsync(email, password);

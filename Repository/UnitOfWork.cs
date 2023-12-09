@@ -12,11 +12,16 @@ namespace Repository
     {
         private readonly ApplicationDbContext _context;
         public IGeneralRepository<Doctor> DoctorRepository { get; }
+        public IGeneralRepository<Booking> BookingRepository { get; }
 
-        public UnitOfWork(ApplicationDbContext applicationDbContext, IGeneralRepository<Doctor> doctorRepository)
+        public UnitOfWork(
+            ApplicationDbContext applicationDbContext,
+            IGeneralRepository<Doctor> doctorRepository,
+            IGeneralRepository<Booking> bookingRepository)
         {
             _context = applicationDbContext;
             DoctorRepository = doctorRepository;
+            BookingRepository = bookingRepository;
         }
 
         public int Complete()

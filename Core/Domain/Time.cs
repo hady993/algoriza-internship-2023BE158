@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Core.Domain
 {
-    public class Time
+    public class Time : BaseEntity
     {
-        public int Id { get; set; }
         public int AppointmentId { get; set; }
         public Appointment Appointment { get; set; }
         public TimeOnly DocTime { get; set; }

@@ -1,4 +1,5 @@
 ﻿using Core.Domain;
+using Core.Helpful;
 using Core.Repository;
 using Microsoft.AspNetCore.Identity;
 
@@ -36,6 +37,16 @@ namespace Repository
             return result;
         }
 
+        public async Task<IdentityResult> UpdateUserAsync(ApplicationUser user)
+        {
+            return await _userManager.UpdateAsync(user);
+        }
+
+        public async Task<IdentityResult> UpdatePasswordAsync(ApplicationUser user, string oldPassword, string newPassword)
+        {
+            return await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
+        }
+
         public async Task<IdentityResult> AddUserToRoleAsync(ApplicationUser user, string role)
         {
             try
@@ -49,9 +60,7 @@ namespace Repository
                 await DeleteUserAsync(user);
 
                 // Error of login failure according to adding role failure!
-                var error = new IdentityError();
-                error.Description = "Login failed according to adding role failure";
-                return IdentityResult.Failed(error);
+                return HelpfulMessages.IdentityResultError("Login failed according to adding role failure");
             }
         }
 

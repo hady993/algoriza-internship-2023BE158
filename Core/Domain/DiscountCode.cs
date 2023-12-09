@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace Core.Domain
 {
-    public class DiscountCode
+    public class DiscountCode : BaseEntity
     {
-        public int Id { get; set; }
         public string Code { get; set; }
         public int RequestsCount { get; set; }
         public DiscountType DiscountType { get; set; }

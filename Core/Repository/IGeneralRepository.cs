@@ -13,7 +13,7 @@ namespace Core.Repository
         Task<bool> EditEntityAsync(TEntity entity, int id);
         void DeleteEntity(TEntity entity);
         Task<bool> DeleteEntityByIdAsync(int id);
-        Task<TEntity> GetEntityByIdAsync(int id);
+        Task<TEntity> GetEntityByIdAsync(int id, string? includeProperties = null);
         Task<IEnumerable<TEntity>> GetAllAsync();
     }
 }

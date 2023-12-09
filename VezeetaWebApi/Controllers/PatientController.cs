@@ -3,6 +3,7 @@ using Core.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using VezeetaWebApi.Util;
 
 namespace VezeetaWebApi.Controllers
 {
@@ -29,15 +30,14 @@ namespace VezeetaWebApi.Controllers
                 // Call the service to register the patient as a user!
                 var result = await _patientService.RegisterPatientAsync(model);
 
-                // Save the profile image to wwwroot/images if the path != null!
-                if (model.ProfileImage != null)
-                {
-                    // Helper method for saving files!
-                    SaveProfileImage(model.ProfileImage);
-                }
-
                 if (result.Succeeded)
                 {
+                    // Save the profile image to wwwroot/images if the path != null!
+                    if (model.ProfileImage != null)
+                    {
+                        _hostingEnvironment.SaveProfileImage(model.ProfileImage);
+                    }
+
                     return Ok("Registration successful");
                 }
 
@@ -47,23 +47,5 @@ namespace VezeetaWebApi.Controllers
             return BadRequest("Invalid registration data");
         }
 
-        // Helper method to save profile image to wwwroot/images
-        private void SaveProfileImage(IFormFile profileImage)
-        {
-            var uploadsDirectory = Path.Combine(_hostingEnvironment.WebRootPath, "images");
-
-            if (!Directory.Exists(uploadsDirectory))
-            {
-                Directory.CreateDirectory(uploadsDirectory);
-            }
-
-            var uniqueFileName = Guid.NewGuid() + profileImage.FileName;
-            var filePath = Path.Combine(uploadsDirectory, uniqueFileName);
-
-            using (var fileStream = new FileStream(filePath, FileMode.Create))
-            {
-                profileImage.CopyTo(fileStream);
-            }
-        }
     }
 }

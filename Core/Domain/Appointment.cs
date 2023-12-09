@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace Core.Domain
 {
-    public class Appointment
+    public class Appointment : BaseEntity
     {
-        public int Id { get; set; }
         public int DoctorId { get; set; }
         public Doctor Doctor { get; set; }
         public Day Day { get; set; }

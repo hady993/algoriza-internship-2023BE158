@@ -10,6 +10,7 @@ namespace Core.Repository
     public interface IUnitOfWork
     {
         IGeneralRepository<Doctor> DoctorRepository { get; }
+        IGeneralRepository<Booking> BookingRepository { get; }
         int Complete();
     }
 }

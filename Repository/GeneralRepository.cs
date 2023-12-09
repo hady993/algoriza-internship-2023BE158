@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Repository
 {
-    public class GeneralRepository<TEntity> : IGeneralRepository<TEntity> where TEntity : class
+    public class GeneralRepository<TEntity> : IGeneralRepository<TEntity> where TEntity : BaseEntity
     {
         private readonly ApplicationDbContext _context;
 
@@ -52,9 +52,19 @@ namespace Repository
             return true;
         }
 
-        public async Task<TEntity> GetEntityByIdAsync(int id)
+        public async Task<TEntity> GetEntityByIdAsync(int id, string? includeProperties = null)
         {
-            return await _context.Set<TEntity>().FindAsync(id);
+            IQueryable<TEntity> query = _context.Set<TEntity>();
+
+            if (includeProperties != null)
+            {
+                foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProperty);
+                }
+            }
+
+            return await query.SingleOrDefaultAsync(e => e.Id == id);
         }
 
         public async Task<IEnumerable<TEntity>> GetAllAsync()

@@ -11,5 +11,6 @@ namespace Core.Service
     public interface IAdminService
     {
         Task<IdentityResult> AddDoctorAsync(DoctorModel model);
+        Task<IdentityResult> EditDoctorAsync(DoctorUpdateModel model);
     }
 }

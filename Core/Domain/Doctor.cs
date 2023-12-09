@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace Core.Domain
 {
-    public class Doctor
+    public class Doctor : BaseEntity
     {
-        public int Id { get; set; }
         public string UserId { get; set; }
         public ApplicationUser User { get; set; }
         public int SpecializationId { get; set; }

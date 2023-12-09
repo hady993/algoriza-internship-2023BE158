@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Core.Domain
 {
-    public class Specialization
+    public class Specialization : BaseEntity
     {
-        public int Id { get; set; }
         public string NameAr { get; set; }
         public string NameEn { get; set; }
         public List<Doctor> Doctors { get; set; }

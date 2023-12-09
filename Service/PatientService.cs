@@ -1,5 +1,5 @@
 ﻿using Core.Domain.DomainUtil;
-using Core.Model;
+using Core.Model.UserModels;
 using Core.Service;
 using Microsoft.AspNetCore.Identity;
 using System;

@@ -7,10 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Model
+namespace Core.Model.UserModels
 {
-    public class DoctorModel : BaseUserModel
+    public class DoctorUpdateModel : SuperBaseUserModel
     {
+        [Required]
+        public int Id { get; set; }
+
         [Required]
         public IFormFile ProfileImage { get; set; }
 

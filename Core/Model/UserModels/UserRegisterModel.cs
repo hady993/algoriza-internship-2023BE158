@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Core.Model
+namespace Core.Model.UserModels
 {
     public class UserRegisterModel : BaseUserModel
     {

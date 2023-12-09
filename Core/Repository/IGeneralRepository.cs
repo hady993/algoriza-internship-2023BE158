@@ -14,6 +14,6 @@ namespace Core.Repository
         void DeleteEntity(TEntity entity);
         Task<bool> DeleteEntityByIdAsync(int id);
         Task<TEntity> GetEntityByIdAsync(int id, string? includeProperties = null);
-        Task<IEnumerable<TEntity>> GetAllAsync();
+        Task<IEnumerable<TEntity>> GetAllAsync(string? includeProperties = null);
     }
 }

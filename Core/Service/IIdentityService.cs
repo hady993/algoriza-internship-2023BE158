@@ -1,6 +1,6 @@
 ﻿using Core.Domain;
 using Core.Domain.DomainUtil;
-using Core.Model;
+using Core.Model.UserModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using System;

@@ -1,7 +1,9 @@
 ﻿using Core.Domain;
 using Core.Domain.DomainUtil;
 using Core.Helpful;
-using Core.Model;
+using Core.Model.DTOs;
+using Core.Model.SearchModels;
+using Core.Model.UserModels;
 using Core.Repository;
 using Core.Service;
 using Microsoft.AspNetCore.Identity;
@@ -24,6 +26,66 @@ namespace Service
             _identityService = identityService;
             _unitOfWork = unitOfWork;
             _identityRepository = identityRepository;
+        }
+
+        public async Task<IEnumerable<DoctorDto>> GetAllDoctorsAsync(StringSearchModel searchModel)
+        {
+            // Retrieving all doctors from the database!
+            var doctors = await _unitOfWork.DoctorRepository.GetAllAsync(includeProperties: "User,Specialization");
+
+            // Create new list of doctorDto to retrieve the data!
+            List<DoctorDto> result = new List<DoctorDto>();
+
+            foreach (var doctor in doctors)
+            {
+                var doctorDto = new DoctorDto
+                {
+                    ProfileImage = doctor.User.ProfileImage,
+                    FullName = doctor.User.FullName,
+                    Email = doctor.User.Email,
+                    Phone = doctor.User.PhoneNumber,
+                    Gender = doctor.User.Gender.ToString(),
+                    DateOfBirth = doctor.User.DateOfBirth,
+                    SpetializationAr = doctor.Specialization.NameAr,
+                    SpetializationEn = doctor.Specialization.NameEn
+                };
+
+                result.Add(doctorDto);
+            }
+
+            // To filter doctors and support pagination!
+            var itemsToSkip = (searchModel.PageNumber - 1) * searchModel.PageSize;
+
+            var filteredResult = result
+                .Where(d => d.FullName.Contains(searchModel.Search) || d.Email.Contains(searchModel.Search))
+                .Skip(itemsToSkip)
+                .Take(searchModel.PageSize);
+
+            return filteredResult;
+        }
+
+        public async Task<DoctorDto> GetDoctorByIdAsync(int id)
+        {
+            // Retrieving the doctor from the database!
+            var doctor = await _unitOfWork.DoctorRepository.GetEntityByIdAsync(id, includeProperties: "User,Specialization");
+
+            if (doctor == null)
+                return null;
+
+            // Create new doctorDto to retrieve the data!
+            var doctorDto = new DoctorDto
+            {
+                ProfileImage = doctor.User.ProfileImage,
+                FullName = doctor.User.FullName,
+                Email = doctor.User.Email,
+                Phone = doctor.User.PhoneNumber,
+                Gender = doctor.User.Gender.ToString(),
+                DateOfBirth = doctor.User.DateOfBirth,
+                SpetializationAr = doctor.Specialization.NameAr,
+                SpetializationEn = doctor.Specialization.NameEn
+            };
+
+            return doctorDto;
         }
 
         public async Task<IdentityResult> AddDoctorAsync(DoctorModel model, string? imagePath)

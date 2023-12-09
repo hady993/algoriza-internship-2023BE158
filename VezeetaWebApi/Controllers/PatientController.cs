@@ -1,4 +1,4 @@
-﻿using Core.Model;
+﻿using Core.Model.UserModels;
 using Core.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;

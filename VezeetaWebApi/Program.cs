@@ -1,5 +1,5 @@
 using Core.Domain;
-using Core.Model;
+using Core.Model.UserModels;
 using Core.Repository;
 using Core.Service;
 using Microsoft.AspNetCore.Authentication.Cookies;

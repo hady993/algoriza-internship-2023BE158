@@ -1,4 +1,5 @@
-﻿using Core.Model;
+﻿using Core.Model.SearchModels;
+using Core.Model.UserModels;
 using Core.Repository;
 using Core.Service;
 using Microsoft.AspNetCore.Authorization;
@@ -24,6 +25,37 @@ namespace VezeetaWebApi.Controllers
             _unitOfWork = unitOfWork;
             _adminService = adminService;
             _hostingEnvironment = hostingEnvironment;
+        }
+
+        [HttpPost()]
+        public async Task<IActionResult> GetAllDoctors([FromBody] StringSearchModel search)
+        {
+            if (ModelState.IsValid)
+            {
+                var doctors = await _adminService.GetAllDoctorsAsync(search);
+                
+                return Ok(doctors);
+            }
+
+            return BadRequest("Invalid data");
+        }
+
+        [HttpPost()]
+        public async Task<IActionResult> GetDoctorById([FromForm] [Required] int id)
+        {
+            if (ModelState.IsValid)
+            {
+                var doctor = await _adminService.GetDoctorByIdAsync(id);
+
+                if (doctor != null)
+                {
+                    return Ok(doctor);
+                }
+
+                return BadRequest($"Doctor with Id : {id} is not found");
+            }
+
+            return BadRequest("Invalid data");
         }
 
         [HttpPost()]

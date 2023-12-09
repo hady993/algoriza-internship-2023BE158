@@ -10,7 +10,8 @@ namespace Core.Service
 {
     public interface IAdminService
     {
-        Task<IdentityResult> AddDoctorAsync(DoctorModel model);
-        Task<IdentityResult> EditDoctorAsync(DoctorUpdateModel model);
+        Task<IdentityResult> AddDoctorAsync(DoctorModel model, string? imagePath);
+        Task<IdentityResult> EditDoctorAsync(DoctorUpdateModel model, string? imagePath);
+        Task<IdentityResult> DeleteDoctorAsync(int id);
     }
 }

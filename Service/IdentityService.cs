@@ -17,13 +17,10 @@ namespace Service
             _identityRepository = identityRepository;
         }
 
-        public async Task<IdentityResult> RegisterUserAsync(BaseUserModel model, AccountType type, IFormFile? profileImage)
+        public async Task<IdentityResult> RegisterUserAsync(BaseUserModel model, AccountType type, string? imagePath)
         {
             // To generate the full name!
             var fullName = model.FirstName + " " + model.LastName;
-
-            // To generate the image path!
-            var imagePath = (profileImage != null) ? "/images/" + Guid.NewGuid() + profileImage.FileName : null;
 
             // To generate a new user for registeration!
             var user = new ApplicationUser
@@ -44,13 +41,10 @@ namespace Service
             return await _identityRepository.CreateUserAsync(user, model.Password, role);
         }
 
-        public async Task<IdentityResult> UpdateUserAsync(SuperBaseUserModel model, IFormFile? profileImage, ApplicationUser user)
+        public async Task<IdentityResult> UpdateUserAsync(SuperBaseUserModel model, string? imagePath, ApplicationUser user)
         {
             // To generate the full name!
             var fullName = model.FirstName + " " + model.LastName;
-
-            // To generate the image path!
-            var imagePath = (profileImage != null) ? "/images/" + Guid.NewGuid() + profileImage.FileName : null;
 
             // To update user's properties!
             user.UserName = model.Email;
@@ -62,6 +56,11 @@ namespace Service
             user.ProfileImage = imagePath;
 
             return await _identityRepository.UpdateUserAsync(user);
+        }
+
+        public async Task<IdentityResult> DeleteUserAsync(ApplicationUser user)
+        {
+            return await _identityRepository.DeleteUserAsync(user);
         }
 
         public async Task<IdentityResult> ChangeUserPasswordAsync(ApplicationUser user, string oldPassword, string newPassword)

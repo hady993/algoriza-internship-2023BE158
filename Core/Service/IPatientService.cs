@@ -11,6 +11,6 @@ namespace Core.Service
 {
     public interface IPatientService
     {
-        Task<IdentityResult> RegisterPatientAsync(UserRegisterModel model);
+        Task<IdentityResult> RegisterPatientAsync(UserRegisterModel model, string? imagePath);
     }
 }

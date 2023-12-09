@@ -27,15 +27,18 @@ namespace VezeetaWebApi.Controllers
         {
             if (ModelState.IsValid)
             {
+                // To generate the image path!
+                var imagePath = ImageFileHelpers.GenerateProfileImagePath(model.ProfileImage);
+
                 // Call the service to register the patient as a user!
-                var result = await _patientService.RegisterPatientAsync(model);
+                var result = await _patientService.RegisterPatientAsync(model, imagePath);
 
                 if (result.Succeeded)
                 {
                     // Save the profile image to wwwroot/images if the path != null!
                     if (model.ProfileImage != null)
                     {
-                        _hostingEnvironment.SaveProfileImage(model.ProfileImage);
+                        _hostingEnvironment.SaveProfileImage(model.ProfileImage, imagePath);
                     }
 
                     return Ok("Registration successful");

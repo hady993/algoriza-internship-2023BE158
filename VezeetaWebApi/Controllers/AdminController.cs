@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Service;
+using System.ComponentModel.DataAnnotations;
 using VezeetaWebApi.Util;
 
 namespace VezeetaWebApi.Controllers
@@ -30,13 +31,16 @@ namespace VezeetaWebApi.Controllers
         {
             if (ModelState.IsValid)
             {
+                // To generate the image path!
+                var imagePath = ImageFileHelpers.GenerateProfileImagePath(model.ProfileImage);
+
                 // Call the service to register the doctor as a user!
-                var result = await _adminService.AddDoctorAsync(model);
+                var result = await _adminService.AddDoctorAsync(model, imagePath);
 
                 if (result.Succeeded)
                 {
                     // Save the profile image to wwwroot/images!
-                    _hostingEnvironment.SaveProfileImage(model.ProfileImage);
+                    _hostingEnvironment.SaveProfileImage(model.ProfileImage, imagePath);
 
                     return Ok("Registration successful");
                 }
@@ -52,14 +56,19 @@ namespace VezeetaWebApi.Controllers
         {
             if (ModelState.IsValid)
             {
+                // To get the old image path!
+                var oldImagePath = await ImageFileHelpers.GetProfileImagePathAsync(_unitOfWork, model.Id);
+
+                // To generate the new image path!
+                var newImagePath = ImageFileHelpers.GenerateProfileImagePath(model.ProfileImage);
+
                 // Call the service to edit the doctor as a user!
-                var result = await _adminService.EditDoctorAsync(model);
+                var result = await _adminService.EditDoctorAsync(model, newImagePath);
 
                 if (result.Succeeded)
                 {
                     // Edit the profile image in wwwroot/images!
-                    var imgPath = await _unitOfWork.GetProfileImagePathAsync(model.Id);
-                    _hostingEnvironment.EditProfileImage(imgPath, model.ProfileImage);
+                    _hostingEnvironment.EditProfileImage(oldImagePath, newImagePath, model.ProfileImage);
 
                     return Ok("Editing Successful");
                 }
@@ -68,6 +77,31 @@ namespace VezeetaWebApi.Controllers
             }
 
             return BadRequest("Invalid editing data");
+        }
+
+        [HttpPost()]
+        public async Task<IActionResult> DeleteDoctor([FromForm] [Required] int id)
+        {
+            if (ModelState.IsValid)
+            {
+                // To get the old image path!
+                var oldImagePath = await ImageFileHelpers.GetProfileImagePathAsync(_unitOfWork, id);
+
+                // Call the service to delete the doctor!
+                var result = await _adminService.DeleteDoctorAsync(id);
+
+                if (result.Succeeded)
+                {
+                    // Delete the profile image in wwwroot/images!
+                    _hostingEnvironment.DeleteProfileImage(oldImagePath);
+
+                    return Ok("Editing Successful");
+                }
+
+                return BadRequest(result.Errors);
+            }
+
+            return BadRequest("Invalid deleting data");
         }
 
     }

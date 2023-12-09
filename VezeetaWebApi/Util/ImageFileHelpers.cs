@@ -5,7 +5,7 @@ namespace VezeetaWebApi.Util
     public static class ImageFileHelpers
     {
         // Helper method to save profile image to wwwroot/images
-        public static void SaveProfileImage(this IWebHostEnvironment _hostingEnvironment, IFormFile profileImage)
+        public static void SaveProfileImage(this IWebHostEnvironment _hostingEnvironment, IFormFile profileImage, string imagePath)
         {
             var uploadsDirectory = Path.Combine(_hostingEnvironment.WebRootPath, "images");
 
@@ -14,8 +14,7 @@ namespace VezeetaWebApi.Util
                 Directory.CreateDirectory(uploadsDirectory);
             }
 
-            var uniqueFileName = Guid.NewGuid() + profileImage.FileName;
-            var filePath = Path.Combine(uploadsDirectory, uniqueFileName);
+            var filePath = Path.Combine(uploadsDirectory, imagePath);
 
             using (var fileStream = new FileStream(filePath, FileMode.Create))
             {
@@ -26,7 +25,7 @@ namespace VezeetaWebApi.Util
         // Helper method to delete profile image in wwwroot/images
         public static void DeleteProfileImage(this IWebHostEnvironment _hostingEnvironment, string imagePath)
         {
-            var filePath = Path.Combine(_hostingEnvironment.WebRootPath, imagePath.TrimStart('/'));
+            var filePath = Path.Combine(_hostingEnvironment.WebRootPath, "images\\" + imagePath.TrimStart('/'));
 
             if (File.Exists(filePath))
             {
@@ -35,19 +34,32 @@ namespace VezeetaWebApi.Util
         }
 
         // Helper method to edit profile image in wwwroot/images
-        public static void EditProfileImage(this IWebHostEnvironment _hostingEnvironment, string existingImagePath, IFormFile newProfileImage)
+        public static void EditProfileImage(this IWebHostEnvironment _hostingEnvironment,
+            string oldImagePath, string newImagePath, IFormFile newProfileImage)
         {
             // Delete the existing image file
-            DeleteProfileImage(_hostingEnvironment, existingImagePath);
+            DeleteProfileImage(_hostingEnvironment, oldImagePath);
 
             // Save the new profile image
-            SaveProfileImage(_hostingEnvironment, newProfileImage);
+            SaveProfileImage(_hostingEnvironment, newProfileImage, newImagePath);
         }
 
         // Helper method to get profile image path
-        public static async Task<string> GetProfileImagePathAsync(this IUnitOfWork _unitOfWork, int id)
+        public static async Task<string> GetProfileImagePathAsync(IUnitOfWork _unitOfWork, int id)
         {
-            return (await _unitOfWork.DoctorRepository.GetEntityByIdAsync(id, "User")).User.ProfileImage;
+            var doctor = await _unitOfWork.DoctorRepository.GetEntityByIdAsync(id, "User");
+
+            if (doctor != null)
+                return doctor.User.ProfileImage;
+
+            return null;
+        }
+
+        // Helper method to generate profile image path
+        public static string GenerateProfileImagePath(IFormFile profileImage)
+        {
+            var imageName = profileImage.FileName;
+            return (imageName != null) ? Guid.NewGuid() + imageName : null;
         }
     }
 }

@@ -19,9 +19,9 @@ namespace Service
             _identityService = identityService;
         }
 
-        public async Task<IdentityResult> RegisterPatientAsync(UserRegisterModel model)
+        public async Task<IdentityResult> RegisterPatientAsync(UserRegisterModel model, string? imagePath)
         {
-            return await _identityService.RegisterUserAsync(model, AccountType.Patient, model.ProfileImage);
+            return await _identityService.RegisterUserAsync(model, AccountType.Patient, imagePath);
         }
     }
 }

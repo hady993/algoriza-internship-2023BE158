@@ -13,8 +13,9 @@ namespace Core.Service
 {
     public interface IIdentityService
     {
-        Task<IdentityResult> RegisterUserAsync(BaseUserModel model, AccountType type, IFormFile? profileImage);
-        Task<IdentityResult> UpdateUserAsync(SuperBaseUserModel model, IFormFile? profileImage, ApplicationUser user);
+        Task<IdentityResult> RegisterUserAsync(BaseUserModel model, AccountType type, string? imagePath);
+        Task<IdentityResult> UpdateUserAsync(SuperBaseUserModel model, string? imagePath, ApplicationUser user);
+        Task<IdentityResult> DeleteUserAsync(ApplicationUser user);
         Task<IdentityResult> ChangeUserPasswordAsync(ApplicationUser user, string oldPassword, string newPassword);
         Task<SignInResult> LoginAsync(string email, string password);
         Task LogoutAsync();

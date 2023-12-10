@@ -15,19 +15,25 @@ namespace Repository
         public IGeneralRepository<Doctor> DoctorRepository { get; }
         public IGeneralRepository<Booking> BookingRepository { get; }
         public IGeneralRepository<DiscountCode> DiscountCodeRepository { get; }
+        public IGeneralRepository<Appointment> AppointmentRepository { get; }
+        public IGeneralRepository<Time> TimeRepository { get; }
 
         public UnitOfWork(
             ApplicationDbContext applicationDbContext,
             IIdentityRepository identityRepository,
             IGeneralRepository<Doctor> doctorRepository,
             IGeneralRepository<Booking> bookingRepository,
-            IGeneralRepository<DiscountCode> discountCodeRepository)
+            IGeneralRepository<DiscountCode> discountCodeRepository,
+            IGeneralRepository<Appointment> appointmentRepository,
+            IGeneralRepository<Time> timeRepository)
         {
             _context = applicationDbContext;
             IdentityRepository = identityRepository;
             DoctorRepository = doctorRepository;
             BookingRepository = bookingRepository;
             DiscountCodeRepository = discountCodeRepository;
+            AppointmentRepository = appointmentRepository;
+            TimeRepository = timeRepository;
         }
 
         public int Complete()

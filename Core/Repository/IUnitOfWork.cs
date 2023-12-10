@@ -13,6 +13,8 @@ namespace Core.Repository
         IGeneralRepository<Doctor> DoctorRepository { get; }
         IGeneralRepository<Booking> BookingRepository { get; }
         IGeneralRepository<DiscountCode> DiscountCodeRepository { get; }
+        IGeneralRepository<Appointment> AppointmentRepository { get; }
+        IGeneralRepository<Time> TimeRepository { get; }
         int Complete();
     }
 }

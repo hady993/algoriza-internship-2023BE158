@@ -23,6 +23,11 @@ namespace Repository
             await _context.Set<TEntity>().AddAsync(entity);
         }
 
+        public async Task AddEntitiesAsync(IEnumerable<TEntity> entities)
+        {
+            await _context.Set<TEntity>().AddRangeAsync(entities);
+        }
+
         public async Task<bool> EditEntityAsync(TEntity entity, int id)
         {
             if (await GetEntityByIdAsync(id) == null)

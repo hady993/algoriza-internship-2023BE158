@@ -41,7 +41,7 @@ namespace VezeetaWebApi.Controllers
             return (await _unitOfWork.IdentityRepository.GetAllUsersAsync()).Count(u => u.AccountType == AccountType.Patient);
         }
 
-        [HttpPost()]
+        [HttpPost]
         public async Task<IActionResult> GetAllDoctors([FromBody] StringSearchModel search)
         {
             if (ModelState.IsValid)
@@ -54,7 +54,7 @@ namespace VezeetaWebApi.Controllers
             return BadRequest("Invalid data");
         }
 
-        [HttpPost()]
+        [HttpPost]
         public async Task<IActionResult> GetDoctorById([FromForm] [Required] int id)
         {
             if (ModelState.IsValid)
@@ -72,7 +72,7 @@ namespace VezeetaWebApi.Controllers
             return BadRequest("Invalid data");
         }
 
-        [HttpPost()]
+        [HttpPost]
         public async Task<IActionResult> AddDoctor([FromForm] DoctorModel model)
         {
             if (ModelState.IsValid)
@@ -97,7 +97,7 @@ namespace VezeetaWebApi.Controllers
             return BadRequest("Invalid registration data");
         }
 
-        [HttpPost()]
+        [HttpPost]
         public async Task<IActionResult> EditDoctor([FromForm] DoctorUpdateModel model)
         {
             if (ModelState.IsValid)
@@ -125,7 +125,7 @@ namespace VezeetaWebApi.Controllers
             return BadRequest("Invalid editing data");
         }
 
-        [HttpPost()]
+        [HttpPost]
         public async Task<IActionResult> DeleteDoctor([FromForm] [Required] int id)
         {
             if (ModelState.IsValid)
@@ -150,7 +150,7 @@ namespace VezeetaWebApi.Controllers
             return BadRequest("Invalid deleting data");
         }
 
-        [HttpPost()]
+        [HttpPost]
         public async Task<IActionResult> GetAllPatients([FromBody] StringSearchModel search)
         {
             if (ModelState.IsValid)
@@ -163,7 +163,7 @@ namespace VezeetaWebApi.Controllers
             return BadRequest("Invalid data");
         }
 
-        [HttpPost()]
+        [HttpPost]
         public async Task<IActionResult> GetPatientById([FromForm] [Required] string id)
         {
             if (ModelState.IsValid)
@@ -181,7 +181,7 @@ namespace VezeetaWebApi.Controllers
             return BadRequest("Invalid data");
         }
 
-        [HttpPost()]
+        [HttpPost]
         public async Task<IActionResult> AddDiscountCodeCoupon([FromForm] AddDiscountModel model)
         {
             if (ModelState.IsValid)
@@ -193,7 +193,7 @@ namespace VezeetaWebApi.Controllers
             return BadRequest("Invalid data");
         }
 
-        [HttpPost()]
+        [HttpPost]
         public async Task<IActionResult> UpdateDiscountCodeCoupon([FromForm] UpdateDiscountModel model)
         {
             if (ModelState.IsValid)
@@ -211,7 +211,7 @@ namespace VezeetaWebApi.Controllers
             return BadRequest("Invalid data");
         }
 
-        [HttpPost()]
+        [HttpPost]
         public async Task<IActionResult> DeleteDiscountCodeCouponById([FromForm] [Required] int id)
         {
             if (ModelState.IsValid)
@@ -229,7 +229,7 @@ namespace VezeetaWebApi.Controllers
             return BadRequest("Invalid data");
         }
 
-        [HttpPost()]
+        [HttpPost]
         public async Task<IActionResult> DeactivateDiscountCodeCouponById([FromForm] [Required] int id)
         {
             if (ModelState.IsValid)

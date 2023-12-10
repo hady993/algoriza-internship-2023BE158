@@ -21,13 +21,11 @@ namespace Service
     {
         private readonly IIdentityService _identityService;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IIdentityRepository _identityRepository;
 
-        public AdminService(IIdentityService identityService, IUnitOfWork unitOfWork, IIdentityRepository identityRepository)
+        public AdminService(IIdentityService identityService, IUnitOfWork unitOfWork)
         {
             _identityService = identityService;
             _unitOfWork = unitOfWork;
-            _identityRepository = identityRepository;
         }
 
         public async Task<IEnumerable<DoctorDto>> GetAllDoctorsAsync(StringSearchModel searchModel)
@@ -100,7 +98,7 @@ namespace Service
             {
                 var doctor = new Doctor
                 {
-                    UserId = _identityRepository.FindUserByEmailAsync(model.Email).Result.Id,
+                    UserId = _unitOfWork.IdentityRepository.FindUserByEmailAsync(model.Email).Result.Id,
                     SpecializationId = (int) model.SpecializationType,
                     Price = 20.0
                 };
@@ -186,7 +184,7 @@ namespace Service
         public async Task<IEnumerable<UserDto>> GetAllPatientsAsync(StringSearchModel searchModel)
         {
             // Retrieving all users from the database!
-            var users = await _identityRepository.GetAllUsersAsync();
+            var users = await _unitOfWork.IdentityRepository.GetAllUsersAsync();
 
             // To filter patients from users!
             var patients = users.Where(u => u.AccountType == AccountType.Patient);
@@ -223,7 +221,7 @@ namespace Service
         public async Task<PatientDto> GetPatientByIdAsync(string id)
         {
             // Retrieving the patient from the database!
-            var patient = await _identityRepository.FindUserByIdAsync(id);
+            var patient = await _unitOfWork.IdentityRepository.FindUserByIdAsync(id);
 
             if (patient == null)
             {

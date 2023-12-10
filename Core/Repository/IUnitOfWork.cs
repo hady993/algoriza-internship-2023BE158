@@ -9,6 +9,7 @@ namespace Core.Repository
 {
     public interface IUnitOfWork
     {
+        IIdentityRepository IdentityRepository { get; }
         IGeneralRepository<Doctor> DoctorRepository { get; }
         IGeneralRepository<Booking> BookingRepository { get; }
         IGeneralRepository<DiscountCode> DiscountCodeRepository { get; }

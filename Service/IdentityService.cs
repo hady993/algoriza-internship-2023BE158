@@ -10,11 +10,11 @@ namespace Service
 {
     public class IdentityService : IIdentityService
     {
-        private readonly IIdentityRepository _identityRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public IdentityService(IIdentityRepository identityRepository)
+        public IdentityService(IUnitOfWork unitOfWork)
         {
-            _identityRepository = identityRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<IdentityResult> RegisterUserAsync(BaseUserModel model, AccountType type, string? imagePath)
@@ -38,7 +38,7 @@ namespace Service
             // To generate the user role name!
             var role = Enum.GetName(typeof(AccountType), type);
 
-            return await _identityRepository.CreateUserAsync(user, model.Password, role);
+            return await _unitOfWork.IdentityRepository.CreateUserAsync(user, model.Password, role);
         }
 
         public async Task<IdentityResult> UpdateUserAsync(SuperBaseUserModel model, string? imagePath, ApplicationUser user)
@@ -55,32 +55,32 @@ namespace Service
             user.DateOfBirth = model.DateOfBirth;
             user.ProfileImage = imagePath;
 
-            return await _identityRepository.UpdateUserAsync(user);
+            return await _unitOfWork.IdentityRepository.UpdateUserAsync(user);
         }
 
         public async Task<IdentityResult> DeleteUserAsync(ApplicationUser user)
         {
-            return await _identityRepository.DeleteUserAsync(user);
+            return await _unitOfWork.IdentityRepository.DeleteUserAsync(user);
         }
 
         public async Task<IdentityResult> ChangeUserPasswordAsync(ApplicationUser user, string oldPassword, string newPassword)
         {
-            return await _identityRepository.UpdatePasswordAsync(user, oldPassword, newPassword);
+            return await _unitOfWork.IdentityRepository.UpdatePasswordAsync(user, oldPassword, newPassword);
         }
 
         public async Task<SignInResult> LoginAsync(string email, string password)
         {
-            return await _identityRepository.PasswordSignInAsync(email, password);
+            return await _unitOfWork.IdentityRepository.PasswordSignInAsync(email, password);
         }
 
         public async Task LogoutAsync()
         {
-            await _identityRepository.SignOutAsync();
+            await _unitOfWork.IdentityRepository.SignOutAsync();
         }
 
         public async Task<bool> IsUserInRoleAsync(string userId, string role)
         {
-            return await _identityRepository.IsUserInRoleAsync(userId, role);
+            return await _unitOfWork.IdentityRepository.IsUserInRoleAsync(userId, role);
         }
     }
 }

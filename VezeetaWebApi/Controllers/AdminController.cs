@@ -1,4 +1,5 @@
-﻿using Core.Model.DiscountCodeModels;
+﻿using Core.Domain.DomainUtil;
+using Core.Model.DiscountCodeModels;
 using Core.Model.SearchModels;
 using Core.Model.UserModels;
 using Core.Repository;
@@ -26,6 +27,18 @@ namespace VezeetaWebApi.Controllers
             _unitOfWork = unitOfWork;
             _adminService = adminService;
             _hostingEnvironment = hostingEnvironment;
+        }
+
+        [HttpGet]
+        public async Task<int> NumOfDoctors()
+        {
+            return (await _unitOfWork.DoctorRepository.GetAllAsync()).Count();
+        }
+
+        [HttpGet]
+        public async Task<int> NumOfPatients()
+        {
+            return (await _unitOfWork.IdentityRepository.GetAllUsersAsync()).Count(u => u.AccountType == AccountType.Patient);
         }
 
         [HttpPost()]

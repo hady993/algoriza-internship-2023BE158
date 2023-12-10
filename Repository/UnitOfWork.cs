@@ -11,17 +11,20 @@ namespace Repository
     public class UnitOfWork : IUnitOfWork
     {
         private readonly ApplicationDbContext _context;
+        public IIdentityRepository IdentityRepository { get; }
         public IGeneralRepository<Doctor> DoctorRepository { get; }
         public IGeneralRepository<Booking> BookingRepository { get; }
         public IGeneralRepository<DiscountCode> DiscountCodeRepository { get; }
 
         public UnitOfWork(
             ApplicationDbContext applicationDbContext,
+            IIdentityRepository identityRepository,
             IGeneralRepository<Doctor> doctorRepository,
             IGeneralRepository<Booking> bookingRepository,
             IGeneralRepository<DiscountCode> discountCodeRepository)
         {
             _context = applicationDbContext;
+            IdentityRepository = identityRepository;
             DoctorRepository = doctorRepository;
             BookingRepository = bookingRepository;
             DiscountCodeRepository = discountCodeRepository;

@@ -1,9 +1,12 @@
 ﻿using Core.Model.AppointmentModels;
+using Core.Model.BookingModels;
 using Core.Model.UserModels;
 using Core.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Service;
+using System.ComponentModel.DataAnnotations;
 
 namespace VezeetaWebApi.Controllers
 {
@@ -17,6 +20,24 @@ namespace VezeetaWebApi.Controllers
         public DoctorController(IDoctorService doctorService)
         {
             _doctorService = doctorService;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ConfirmCheckUp([FromForm] ConfirmCheckupModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _doctorService.ConfirmCheckUpAsync(model);
+
+                if (result)
+                {
+                    return Ok("Confirming checkup successful");
+                }
+
+                return BadRequest("Confirming checkup failed");
+            }
+
+            return BadRequest("Invalid data");
         }
 
         [HttpPost]

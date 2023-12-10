@@ -1,6 +1,7 @@
 ﻿using Core.Domain;
 using Core.Domain.DomainUtil;
 using Core.Model.AppointmentModels;
+using Core.Model.BookingModels;
 using Core.Repository;
 using Core.Service;
 using System;
@@ -19,6 +20,30 @@ namespace Service
         public DoctorService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
+        }
+
+        public async Task<bool> ConfirmCheckUpAsync(ConfirmCheckupModel model)
+        {
+            // Check if doctor's time have this booking!
+            var booking = await _unitOfWork.BookingRepository.GetEntityByIdAsync(model.BookingId);
+
+            if (booking == null)
+            {
+                return false;
+            }
+
+            if (booking.TimeId != model.TimeId || booking.Status == BookingStatus.Cancelled)
+            {
+                return false;
+            }
+
+            // Confirm checkup!
+            booking.Status = BookingStatus.Completed;
+
+            var result = await _unitOfWork.BookingRepository.EditEntityAsync(booking, model.BookingId);
+            _unitOfWork.Complete();
+
+            return result;
         }
 
         public async Task<bool> AddAppointmentAsync(AddDoctorSettingsModel model)

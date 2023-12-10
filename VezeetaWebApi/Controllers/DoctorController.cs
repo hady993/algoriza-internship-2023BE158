@@ -54,5 +54,23 @@ namespace VezeetaWebApi.Controllers
 
             return BadRequest("Invalid data");
         }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteDoctorTime([FromForm] DeleteDoctorTimeModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _doctorService.DeleteTimeAsync(model);
+
+                if (result)
+                {
+                    return Ok("Doctor's time deleting successful");
+                }
+
+                return BadRequest("Doctor's time deleting failed");
+            }
+
+            return BadRequest("Invalid data");
+        }
     }
 }

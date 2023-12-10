@@ -7,9 +7,12 @@ using System.Threading.Tasks;
 
 namespace Core.Model.AppointmentModels
 {
-    public class UpdateDoctorSettingModel : DeleteDoctorTimeModel
+    public class DeleteDoctorTimeModel
     {
         [Required]
-        public string NewTime { get; set; }
+        public int DoctorId { get; set; }
+
+        [Required]
+        public int TimeId { get; set; }
     }
 }

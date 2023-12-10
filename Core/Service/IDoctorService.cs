@@ -11,5 +11,6 @@ namespace Core.Service
     {
         Task<bool> AddAppointmentAsync(AddDoctorSettingsModel model);
         Task<bool> UpdateTimeAsync(UpdateDoctorSettingModel model);
+        Task<bool> DeleteTimeAsync(DeleteDoctorTimeModel model);
     }
 }

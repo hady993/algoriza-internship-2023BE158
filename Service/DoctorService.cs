@@ -127,5 +127,43 @@ namespace Service
 
             return result;
         }
+
+        public async Task<bool> DeleteTimeAsync(DeleteDoctorTimeModel model)
+        {
+            // Ensure that doctor exists!
+            var doctor = await _unitOfWork.DoctorRepository.GetEntityByIdAsync(model.DoctorId, includeProperties: "Appointments");
+
+            if (doctor == null)
+            {
+                return false;
+            }
+
+            // Ensure that doctor has the time with a certain id!
+            var time = await _unitOfWork.TimeRepository.GetEntityByIdAsync(model.TimeId, includeProperties: "Appointment,Booking");
+
+            if (time == null)
+            {
+                return false;
+            }
+
+            if (time.Appointment.DoctorId != model.DoctorId)
+            {
+                return false;
+            }
+
+            // Ensure that the time is not booked with Completed or Pending booking!
+            var bookingStatus = time.Booking?.Status;
+
+            if (bookingStatus == BookingStatus.Pending || bookingStatus == BookingStatus.Completed)
+            {
+                return false;
+            }
+
+            // Delete doctor's time!
+            _unitOfWork.TimeRepository.DeleteEntity(time);
+            _unitOfWork.Complete();
+
+            return true;
+        }
     }
 }

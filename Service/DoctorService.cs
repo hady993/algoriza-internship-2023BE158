@@ -1,4 +1,5 @@
 ﻿using Core.Domain;
+using Core.Domain.DomainUtil;
 using Core.Model.AppointmentModels;
 using Core.Repository;
 using Core.Service;
@@ -20,7 +21,7 @@ namespace Service
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<bool> AddAppointment(AddDoctorSettingsModel model)
+        public async Task<bool> AddAppointmentAsync(AddDoctorSettingsModel model)
         {
             // Update doctor's price!
             var doctor = await _unitOfWork.DoctorRepository.GetEntityByIdAsync(model.DoctorId);
@@ -87,6 +88,44 @@ namespace Service
             return true;
         }
 
+        public async Task<bool> UpdateTimeAsync(UpdateDoctorSettingModel model)
+        {
+            // Ensure that doctor exists!
+            var doctor = await _unitOfWork.DoctorRepository.GetEntityByIdAsync(model.DoctorId, includeProperties: "Appointments");
 
+            if (doctor == null)
+            {
+                return false;
+            }
+
+            // Ensure that doctor has the time with a certain id!
+            var time = await _unitOfWork.TimeRepository.GetEntityByIdAsync(model.TimeId, includeProperties: "Appointment,Booking");
+
+            if (time == null)
+            {
+                return false;
+            }
+
+            if (time.Appointment.DoctorId != model.DoctorId)
+            {
+                return false;
+            }
+
+            // Ensure that the time is not booked with Completed or Pending booking!
+            var bookingStatus = time.Booking?.Status;
+
+            if (bookingStatus == BookingStatus.Pending || bookingStatus == BookingStatus.Completed)
+            {
+                return false;
+            }
+
+            // Update doctor's time!
+            time.DocTime = TimeOnly.ParseExact(model.NewTime, "hh:mm tt", CultureInfo.InvariantCulture);
+
+            var result = await _unitOfWork.TimeRepository.EditEntityAsync(time, model.TimeId);
+            _unitOfWork.Complete();
+
+            return result;
+        }
     }
 }

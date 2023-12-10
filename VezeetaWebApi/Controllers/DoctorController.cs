@@ -24,7 +24,7 @@ namespace VezeetaWebApi.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _doctorService.AddAppointment(model);
+                var result = await _doctorService.AddAppointmentAsync(model);
 
                 if (result)
                 {
@@ -32,6 +32,24 @@ namespace VezeetaWebApi.Controllers
                 }
 
                 return BadRequest("Doctor's appointments adding failed");
+            }
+
+            return BadRequest("Invalid data");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateDoctorTime([FromForm] UpdateDoctorSettingModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _doctorService.UpdateTimeAsync(model);
+
+                if (result)
+                {
+                    return Ok("Doctor's time updating successful");
+                }
+
+                return BadRequest("Doctor's time updating failed");
             }
 
             return BadRequest("Invalid data");

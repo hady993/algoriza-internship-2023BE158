@@ -9,6 +9,7 @@ namespace Core.Service
 {
     public interface IDoctorService
     {
-        Task<bool> AddAppointment(AddDoctorSettingsModel model);
+        Task<bool> AddAppointmentAsync(AddDoctorSettingsModel model);
+        Task<bool> UpdateTimeAsync(UpdateDoctorSettingModel model);
     }
 }

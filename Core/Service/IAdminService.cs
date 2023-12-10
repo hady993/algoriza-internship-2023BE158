@@ -1,4 +1,5 @@
-﻿using Core.Model.DTOs;
+﻿using Core.Model.DiscountCodeModels;
+using Core.Model.DTOs;
 using Core.Model.SearchModels;
 using Core.Model.UserModels;
 using Microsoft.AspNetCore.Identity;
@@ -19,5 +20,9 @@ namespace Core.Service
         Task<IdentityResult> DeleteDoctorAsync(int id);
         Task<IEnumerable<UserDto>> GetAllPatientsAsync(StringSearchModel searchModel);
         Task<PatientDto> GetPatientByIdAsync(string id);
+        Task AddDiscountCodeAsync(AddDiscountModel model);
+        Task<bool> UpdateDiscountCodeAsync(UpdateDiscountModel model);
+        Task<bool> DeleteDiscountCodeByIdAsync(int id);
+        Task<bool> DeactivateDiscountCodeByIdAsync(int id);
     }
 }

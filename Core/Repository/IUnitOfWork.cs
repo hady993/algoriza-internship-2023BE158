@@ -11,6 +11,7 @@ namespace Core.Repository
     {
         IGeneralRepository<Doctor> DoctorRepository { get; }
         IGeneralRepository<Booking> BookingRepository { get; }
+        IGeneralRepository<DiscountCode> DiscountCodeRepository { get; }
         int Complete();
     }
 }

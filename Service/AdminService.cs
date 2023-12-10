@@ -1,6 +1,7 @@
 ﻿using Core.Domain;
 using Core.Domain.DomainUtil;
 using Core.Helpful;
+using Core.Model.DiscountCodeModels;
 using Core.Model.DTOs;
 using Core.Model.SearchModels;
 using Core.Model.UserModels;
@@ -281,5 +282,96 @@ namespace Service
             return patientDto;
         }
 
+        public async Task AddDiscountCodeAsync(AddDiscountModel model)
+        {
+            // Create new discountCode to add it to the database!
+            var discountCode = new DiscountCode
+            {
+                Code = model.DiscountCode,
+                RequestsCount = model.RequestsCount,
+                DiscountType = model.DiscountType,
+                Value = model.Value,
+                IsActive = true
+            };
+
+            await _unitOfWork.DiscountCodeRepository.AddEntityAsync(discountCode);
+            _unitOfWork.Complete();
+        }
+
+        public async Task<bool> UpdateDiscountCodeAsync(UpdateDiscountModel model)
+        {
+            // Check if the discount code exists!
+            var code = await _unitOfWork.DiscountCodeRepository.GetEntityByIdAsync(model.Id, includeProperties: "Bookings");
+
+            if (code == null)
+            {
+                return false;
+            }
+
+            // Check if the coupon is used by pending or completed bookings!
+            if (code.Bookings.Any(b => b.Status != BookingStatus.Cancelled))
+            {
+                return false;
+            }
+
+            // Update the discount code!
+            code.Code = model.DiscountCode;
+            code.RequestsCount = model.RequestsCount;
+            code.DiscountType = model.DiscountType;
+            code.Value = model.Value;
+
+            var result = await _unitOfWork.DiscountCodeRepository.EditEntityAsync(code, model.Id);
+            _unitOfWork.Complete();
+
+            return result;
+        }
+
+        public async Task<bool> DeleteDiscountCodeByIdAsync(int id)
+        {
+            // Check if the discount code exists!
+            var code = await _unitOfWork.DiscountCodeRepository.GetEntityByIdAsync(id, includeProperties: "Bookings");
+
+            if (code == null)
+            {
+                return false;
+            }
+
+            // Check if the coupon is used by pending or completed bookings!
+            if (code.Bookings.Any(b => b.Status != BookingStatus.Cancelled))
+            {
+                return false;
+            }
+
+            // Delete the discount code!
+            _unitOfWork.DiscountCodeRepository.DeleteEntity(code);
+            _unitOfWork.Complete();
+
+            return true;
+        }
+
+        public async Task<bool> DeactivateDiscountCodeByIdAsync(int id)
+        {
+            // Check if the discount code exists!
+            var code = await _unitOfWork.DiscountCodeRepository.GetEntityByIdAsync(id, includeProperties: "Bookings");
+
+            if (code == null)
+            {
+                return false;
+            }
+
+            // Check if the coupon is used by pending bookings!
+            if (code.Bookings.Any(b => b.Status == BookingStatus.Pending))
+            {
+                return false;
+            }
+
+            // Deactivate the discount code!
+            code.IsActive = false;
+
+            var result = await _unitOfWork.DiscountCodeRepository.EditEntityAsync(code, id);
+            _unitOfWork.Complete();
+
+            return result;
+        }
     }
 }

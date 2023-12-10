@@ -1,4 +1,5 @@
-﻿using Core.Model.SearchModels;
+﻿using Core.Model.DiscountCodeModels;
+using Core.Model.SearchModels;
 using Core.Model.UserModels;
 using Core.Repository;
 using Core.Service;
@@ -167,5 +168,70 @@ namespace VezeetaWebApi.Controllers
             return BadRequest("Invalid data");
         }
 
+        [HttpPost()]
+        public async Task<IActionResult> AddDiscountCodeCoupon([FromForm] AddDiscountModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                await _adminService.AddDiscountCodeAsync(model);
+                return Ok("Discount code coupon adding successful");
+            }
+
+            return BadRequest("Invalid data");
+        }
+
+        [HttpPost()]
+        public async Task<IActionResult> UpdateDiscountCodeCoupon([FromForm] UpdateDiscountModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _adminService.UpdateDiscountCodeAsync(model);
+
+                if (result)
+                {
+                    return Ok("Discount code coupon updating successful");
+                }
+
+                return BadRequest("Discount code coupon updating failed");
+            }
+
+            return BadRequest("Invalid data");
+        }
+
+        [HttpPost()]
+        public async Task<IActionResult> DeleteDiscountCodeCouponById([FromForm] [Required] int id)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _adminService.DeleteDiscountCodeByIdAsync(id);
+
+                if (result)
+                {
+                    return Ok("Discount code coupon deleting successful");
+                }
+
+                return BadRequest("Discount code coupon deleting failed");
+            }
+
+            return BadRequest("Invalid data");
+        }
+
+        [HttpPost()]
+        public async Task<IActionResult> DeactivateDiscountCodeCouponById([FromForm] [Required] int id)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _adminService.DeactivateDiscountCodeByIdAsync(id);
+
+                if (result)
+                {
+                    return Ok("Discount code coupon deactivation successful");
+                }
+
+                return BadRequest("Discount code coupon deactivation failed");
+            }
+
+            return BadRequest("Invalid data");
+        }
     }
 }

@@ -67,7 +67,7 @@ namespace VezeetaWebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddBookingAsync([FromBody] BookingModel model)
+        public async Task<IActionResult> AddBooking([FromBody] BookingModel model)
         {
             if (ModelState.IsValid)
             {
@@ -79,6 +79,24 @@ namespace VezeetaWebApi.Controllers
                 }
 
                 return BadRequest("Adding booking failed");
+            }
+
+            return BadRequest("Invalid data");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CancelBooking([FromBody] BookingCancelModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _patientService.CancelBookingAsync(model);
+
+                if (result)
+                {
+                    return Ok("Cancel booking successful");
+                }
+
+                return BadRequest("Cancel booking failed");
             }
 
             return BadRequest("Invalid data");

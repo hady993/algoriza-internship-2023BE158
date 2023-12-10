@@ -203,6 +203,29 @@ namespace Service
             return true;
         }
 
+        public async Task<bool> CancelBookingAsync(BookingCancelModel model)
+        {
+            // Check if the patient have this booking!
+            var booking = await _unitOfWork.BookingRepository.GetEntityByIdAsync(model.BookingId);
+
+            if (booking == null)
+            {
+                return false;
+            }
+
+            if (booking.UserId != model.PatientId)
+            {
+                return false;
+            }
+
+            // Cancel the booking!
+            booking.Status = BookingStatus.Cancelled;
+
+            var result = await _unitOfWork.BookingRepository.EditEntityAsync(booking, model.BookingId);
+            _unitOfWork.Complete();
+
+            return result;
+        }
 
         // Helper method to calculate the final price after discount!
         private double CalculateFinalPrice(DiscountCode? coupon, double price)

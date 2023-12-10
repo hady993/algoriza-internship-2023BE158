@@ -17,5 +17,6 @@ namespace Core.Service
         Task<IdentityResult> RegisterPatientAsync(UserRegisterModel model, string? imagePath);
         Task<IEnumerable<DoctorPatientDto>> GetAllDoctorsAsync(StringSearchModel searchModel);
         Task<bool> AddBookingAsync(BookingModel bookingModel);
+        Task<bool> CancelBookingAsync(BookingCancelModel model);
     }
 }

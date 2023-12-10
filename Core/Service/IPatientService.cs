@@ -1,4 +1,6 @@
 ﻿using Core.Domain.DomainUtil;
+using Core.Model.DTOs;
+using Core.Model.SearchModels;
 using Core.Model.UserModels;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -12,5 +14,6 @@ namespace Core.Service
     public interface IPatientService
     {
         Task<IdentityResult> RegisterPatientAsync(UserRegisterModel model, string? imagePath);
+        Task<IEnumerable<DoctorPatientDto>> GetAllDoctorsAsync(StringSearchModel searchModel);
     }
 }

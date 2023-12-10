@@ -1,8 +1,10 @@
-﻿using Core.Model.UserModels;
+﻿using Core.Model.SearchModels;
+using Core.Model.UserModels;
 using Core.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Service;
 using VezeetaWebApi.Util;
 
 namespace VezeetaWebApi.Controllers
@@ -21,7 +23,7 @@ namespace VezeetaWebApi.Controllers
             _hostingEnvironment = hostingEnvironment;
         }
 
-        [HttpPost()]
+        [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Register([FromForm] UserRegisterModel model)
         {
@@ -48,6 +50,19 @@ namespace VezeetaWebApi.Controllers
             }
 
             return BadRequest("Invalid registration data");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetAllDoctors([FromBody] StringSearchModel search)
+        {
+            if (ModelState.IsValid)
+            {
+                var doctors = await _patientService.GetAllDoctorsAsync(search);
+
+                return Ok(doctors);
+            }
+
+            return BadRequest("Invalid data");
         }
 
     }

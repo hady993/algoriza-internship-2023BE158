@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Core.Model.DTOs
 {
-    public class UserDto : BaseUserDto
+    public class DayDto
     {
-        public DateOnly DateOfBirth { get; set; }
+        public string Day { get; set; }
+        public List<TimeDto> Times { get; set; }
     }
 }

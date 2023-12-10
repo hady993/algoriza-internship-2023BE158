@@ -1,4 +1,5 @@
 ﻿using Core.Domain.DomainUtil;
+using Core.Model.BookingModels;
 using Core.Model.DTOs;
 using Core.Model.SearchModels;
 using Core.Model.UserModels;
@@ -15,5 +16,6 @@ namespace Core.Service
     {
         Task<IdentityResult> RegisterPatientAsync(UserRegisterModel model, string? imagePath);
         Task<IEnumerable<DoctorPatientDto>> GetAllDoctorsAsync(StringSearchModel searchModel);
+        Task<bool> AddBookingAsync(BookingModel bookingModel);
     }
 }

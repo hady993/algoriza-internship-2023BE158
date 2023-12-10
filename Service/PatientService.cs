@@ -1,4 +1,6 @@
-﻿using Core.Domain.DomainUtil;
+﻿using Core.Domain;
+using Core.Domain.DomainUtil;
+using Core.Model.BookingModels;
 using Core.Model.DTOs;
 using Core.Model.SearchModels;
 using Core.Model.UserModels;
@@ -98,5 +100,124 @@ namespace Service
             return filteredResult;
         }
 
+        public async Task<bool> AddBookingAsync(BookingModel bookingModel)
+        {
+            // Check if the patient exists as a user!
+            var patient = await _unitOfWork.IdentityRepository.FindUserByIdAsync(bookingModel.PatientId);
+            
+            if (patient == null)
+            {
+                return false;
+            }
+
+            if (patient.AccountType != AccountType.Patient)
+            {
+                return false;
+            }
+
+            // Check if you have the provided time and not booked!
+            var time = await _unitOfWork.TimeRepository.GetEntityByIdAsync(bookingModel.TimeId, includeProperties: "Booking,Appointment");
+            
+            if (time == null)
+            {
+                return false;
+            }
+
+            if (time.Booking != null)
+            {
+                if (time.Booking.Status != BookingStatus.Cancelled)
+                {
+                    return false;
+                }
+            }
+
+            // Check if you booked this doctor before!
+            var oldBookings = (await _unitOfWork.BookingRepository.GetAllAsync(includeProperties: "Time"))
+                .Where(b => b.UserId == bookingModel.PatientId);
+
+            foreach (var oldBooking in  oldBookings)
+            {
+                var oldAppointment = await _unitOfWork.AppointmentRepository.GetEntityByIdAsync(oldBooking.Time.AppointmentId);
+
+                if (oldAppointment != null && 
+                    oldAppointment.DoctorId == time.Appointment.DoctorId && 
+                    oldBooking.Status == BookingStatus.Pending)
+                {
+                    return false;
+                }
+            }
+
+            // Check if you have an active discount code coupon!
+            var code = bookingModel.DiscountCodeCoupon;
+            var coupons = await _unitOfWork.DiscountCodeRepository.GetAllAsync();
+
+            if (!string.IsNullOrWhiteSpace(code))
+            {
+                if (coupons.All(c => c.Code != code))
+                {
+                    return false;
+                }
+
+                if (coupons.Where(c => c.Code == code).All(c => !c.IsActive))
+                {
+                    return false;
+                }
+
+                // To check if the coupon is open for the patient of not!
+                var numOfCompletedBookings = oldBookings.Where(b => b.Status == BookingStatus.Completed).Count();
+                var numOfAvailability = coupons.FirstOrDefault(c =>  c.Code == code)?.RequestsCount;
+
+                if (numOfAvailability > numOfCompletedBookings)
+                {
+                    return false;
+                }
+            }
+
+            // Get doctor's price!
+            var price = (await _unitOfWork.DoctorRepository.GetEntityByIdAsync(time.Appointment.DoctorId)).Price;
+
+            // Get discount coupon!
+            var coupon = coupons.FirstOrDefault(c => c.Code == code);
+
+            // Calculate the final price!
+            var finalPrice = CalculateFinalPrice(coupon, price);
+
+            // Adding the booking!
+            var booking = new Booking
+            {
+                UserId = bookingModel.PatientId,
+                TimeId = bookingModel.TimeId,
+                Price = price,
+                FinalPrice = finalPrice,
+                Status = BookingStatus.Pending
+            };
+
+            if (coupon != null)
+            {
+                booking.DiscountCodeId = coupon.Id;
+            }
+
+            await _unitOfWork.BookingRepository.AddEntityAsync(booking);
+            _unitOfWork.Complete();
+
+            return true;
+        }
+
+
+        // Helper method to calculate the final price after discount!
+        private double CalculateFinalPrice(DiscountCode? coupon, double price)
+        {
+            if (coupon == null)
+            {
+                return price;
+            }
+
+            if (coupon.DiscountType == DiscountType.Percentage)
+            {
+                return price - ((price * coupon.Value) / 100.0);
+            }
+
+            return price - coupon.Value;
+        }
     }
 }

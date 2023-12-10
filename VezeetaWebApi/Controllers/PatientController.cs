@@ -1,4 +1,5 @@
-﻿using Core.Model.SearchModels;
+﻿using Core.Model.BookingModels;
+using Core.Model.SearchModels;
 using Core.Model.UserModels;
 using Core.Service;
 using Microsoft.AspNetCore.Authorization;
@@ -65,5 +66,22 @@ namespace VezeetaWebApi.Controllers
             return BadRequest("Invalid data");
         }
 
+        [HttpPost]
+        public async Task<IActionResult> AddBookingAsync([FromBody] BookingModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _patientService.AddBookingAsync(model);
+
+                if (result)
+                {
+                    return Ok("Adding booking successful");
+                }
+
+                return BadRequest("Adding booking failed");
+            }
+
+            return BadRequest("Invalid data");
+        }
     }
 }

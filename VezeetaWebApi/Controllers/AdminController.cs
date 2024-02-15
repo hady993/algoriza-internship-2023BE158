@@ -5,9 +5,7 @@ using Core.Model.UserModels;
 using Core.Repository;
 using Core.Service;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Service;
 using System.ComponentModel.DataAnnotations;
 using VezeetaWebApi.Util;
 
@@ -97,7 +95,7 @@ namespace VezeetaWebApi.Controllers
             return BadRequest("Invalid registration data");
         }
 
-        [HttpPost]
+        [HttpPut]
         public async Task<IActionResult> EditDoctor([FromForm] DoctorUpdateModel model)
         {
             if (ModelState.IsValid)
@@ -125,7 +123,7 @@ namespace VezeetaWebApi.Controllers
             return BadRequest("Invalid editing data");
         }
 
-        [HttpPost]
+        [HttpDelete]
         public async Task<IActionResult> DeleteDoctor([FromForm] [Required] int id)
         {
             if (ModelState.IsValid)
@@ -141,7 +139,7 @@ namespace VezeetaWebApi.Controllers
                     // Delete the profile image in wwwroot/images!
                     _hostingEnvironment.DeleteProfileImage(oldImagePath);
 
-                    return Ok("Editing Successful");
+                    return Ok("Deleting Successful");
                 }
 
                 return BadRequest(result.Errors);
@@ -193,7 +191,7 @@ namespace VezeetaWebApi.Controllers
             return BadRequest("Invalid data");
         }
 
-        [HttpPost]
+        [HttpPut]
         public async Task<IActionResult> UpdateDiscountCodeCoupon([FromForm] UpdateDiscountModel model)
         {
             if (ModelState.IsValid)
@@ -211,7 +209,7 @@ namespace VezeetaWebApi.Controllers
             return BadRequest("Invalid data");
         }
 
-        [HttpPost]
+        [HttpDelete]
         public async Task<IActionResult> DeleteDiscountCodeCouponById([FromForm] [Required] int id)
         {
             if (ModelState.IsValid)
@@ -229,7 +227,7 @@ namespace VezeetaWebApi.Controllers
             return BadRequest("Invalid data");
         }
 
-        [HttpPost]
+        [HttpPut]
         public async Task<IActionResult> DeactivateDiscountCodeCouponById([FromForm] [Required] int id)
         {
             if (ModelState.IsValid)

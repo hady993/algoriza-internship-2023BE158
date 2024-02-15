@@ -84,7 +84,7 @@ namespace VezeetaWebApi.Controllers
             return BadRequest("Invalid data");
         }
 
-        [HttpPost]
+        [HttpPut]
         public async Task<IActionResult> CancelBooking([FromBody] BookingCancelModel model)
         {
             if (ModelState.IsValid)

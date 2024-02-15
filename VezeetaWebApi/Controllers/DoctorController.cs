@@ -22,7 +22,7 @@ namespace VezeetaWebApi.Controllers
             _doctorService = doctorService;
         }
 
-        [HttpPost]
+        [HttpPut]
         public async Task<IActionResult> ConfirmCheckUp([FromForm] ConfirmCheckupModel model)
         {
             if (ModelState.IsValid)
@@ -58,7 +58,7 @@ namespace VezeetaWebApi.Controllers
             return BadRequest("Invalid data");
         }
 
-        [HttpPost]
+        [HttpPut]
         public async Task<IActionResult> UpdateDoctorTime([FromForm] UpdateDoctorSettingModel model)
         {
             if (ModelState.IsValid)
@@ -76,7 +76,7 @@ namespace VezeetaWebApi.Controllers
             return BadRequest("Invalid data");
         }
 
-        [HttpPost]
+        [HttpDelete]
         public async Task<IActionResult> DeleteDoctorTime([FromForm] DeleteDoctorTimeModel model)
         {
             if (ModelState.IsValid)

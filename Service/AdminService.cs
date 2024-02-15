@@ -8,12 +8,6 @@ using Core.Model.UserModels;
 using Core.Repository;
 using Core.Service;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Service
 {
@@ -126,7 +120,7 @@ namespace Service
 
             if (bookings.Any())
             {
-                var isBooked = bookings.Any(b => b.Time.Appointment.DoctorId == model.Id && b.Status != BookingStatus.Cancelled);
+                var isBooked = bookings.Any(b => b.Time != null && b.Time.Appointment.DoctorId == model.Id && b.Status != BookingStatus.Cancelled);
 
                 if (isBooked)
                 {
@@ -162,7 +156,7 @@ namespace Service
 
             if (bookings.Any())
             {
-                var isBooked = bookings.Any(b => b.Time.Appointment.DoctorId == id && b.Status != BookingStatus.Cancelled);
+                var isBooked = bookings.Any(b => b.Time != null && b.Time.Appointment.DoctorId == id && b.Status != BookingStatus.Cancelled);
 
                 if (isBooked)
                 {
